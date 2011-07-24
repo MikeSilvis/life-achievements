@@ -1,0 +1,26 @@
+#wrapper {
+	width: 1000px;
+	margin: 0 auto
+}
+
+#header {
+	float: left;
+	width: 1000px;
+	padding-bottom: 30px
+}
+
+#content {
+	float: left;
+	width: 700px
+}
+
+#sideBar {
+	float: right;
+	width: 300px
+}
+
+#footer {
+	float: left;
+	width: 1000px;
+	padding-top: 30px
+}
