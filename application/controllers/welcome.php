@@ -19,8 +19,15 @@ class Welcome extends CI_Controller {
 	 */
 	public function index()
 	{
-		$this->load->view('welcome_message');
-        
+      // Write to $title
+      $this->template->write('title', 'Welcome to the Template Library Docs!');
+      
+      // Write to $content
+      $this->template->write_view('content', 'welcome_message');
+      $this->template->write_view('content', 'default/sideBar');
+      
+      // Render the template
+      $this->template->render();
 	}
 }
 

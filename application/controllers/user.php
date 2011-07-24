@@ -13,7 +13,6 @@ class User extends CI_Controller {
 	{
 		$data = array(
 			'fb_data' => $this->fb_data,
-			'title' => 'Facebook Authentication',
 		);
 				
 		if ($this->fb_data['me']) { // if the user logged in via facebook
@@ -26,9 +25,9 @@ class User extends CI_Controller {
 			else
 				User_model::register_facebook($this->fb_data); // register the user with facebook information	
 		}
-		$partials = array('content'=>'user/main/process');
-
-		$this->template->load('default/template', $partials, $data);
+		$this->template->write('title', "Facebook Authentication");
+		$this->template->write_view('content', 'user/main/process',$data);	
+		$this->template->render();
 	}
 	function profile()
 	{
@@ -45,26 +44,25 @@ class User extends CI_Controller {
 			redirect('/user/process'); // redirect to their profile.
 				
 		$data = array(
-                  	'friendsArray' => $friendsArray,
+            'friendsArray' => $friendsArray,
 			'fb_data' => $this->fb_data,
-			'title' => "{$user->getName()}'s Achievements",
 			'user' => $user,
 		);
-		
-		$partials = array('content'=>'user/main/profile','sideBar' =>'user/sidebar/friends');
-
-		$this->template->load('default/template', $partials, $data);
+				
+		$this->template->write('title', "{$user->getName()}'s Achievements");
+		$this->template->write_view('content', 'user/main/profile',$data);	
+		$this->template->write_view('sideBar', 'user/sidebar/friends',$data);		
+		$this->template->render();
 	}
  	function displayUsers() 
  	{       
         $data = array(
           	'userArray' => User_model::getUsers(),
 			'fb_data' => $this->fb_data,
-			'title' => "Life Achievements Active Users",
 		);
-		$partials = array('content'=>'user/main/user_list','sideBar'=>'default/sideBar');
-
-		$this->template->load('default/template', $partials, $data);          
+		$this->template->write('title', 'Active Users');
+		$this->template->write_view('content', 'user/main/user_list',$data);		
+		$this->template->render();
     }
 
 }
