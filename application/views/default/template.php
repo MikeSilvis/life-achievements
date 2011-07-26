@@ -4,6 +4,7 @@
 <title><?=$title;?></title>
 <link rel="stylesheet" href='<?=base_url()?>assets/css/layout.css' type="text/css" media="screen, projection" /> 
 <link rel="stylesheet" href='<?=base_url()?>assets/css/style.css' type="text/css" media="screen, projection" /> 
+<meta property="fb:app_id" content="229353873772038">
 <?= $_scripts ?>
 <?= $_styles ?>
 </head>
