@@ -7,6 +7,7 @@ class User extends CI_Controller {
 	{
 		parent::__construct();
         $this->fb_data = $this->session->userdata('fb_data'); // This array contains all the user FB information
+        $this->user_id = $this->session->userdata('user_id'); // This array contains all the user FB information
 	}
 
 	function process()
@@ -19,7 +20,7 @@ class User extends CI_Controller {
 			$user = User_model::byFBID($this->fb_data['me']['id']);
 
 			if ($user) { // user has already signed up on my site. Process them
-				User_model::login($user); // Log the user in.
+				$user->login($user); // Log the user in.
 				redirect('/user/profile/'.$user->getID()); // redirect to their profile.
 			}
 			else
@@ -32,16 +33,16 @@ class User extends CI_Controller {
 	function profile()
 	{
 		$user_id = (int)$this->uri->segment(3);
-		
-      	if ($this->fb_data['me']) // Only ask for friends if the user is logged in.
-              $friendsArray = User_model::getRegisteredFriends();
-      	else
-              $friendsArray = NULL;
-							
+		        							
 		if ($this->uri->segment(3) != NULL)
 			$user = User_model::byID($user_id);			
 		if (!is_object($user))
 			redirect('/user/process'); // redirect to their profile.
+
+      	if (($this->fb_data['me']) && ($user_id == $this->user_id)) // Only ask for friends if the user is logged in.
+              $friendsArray = $user->getRegisteredFriends(true);
+      	else
+              $friendsArray = $user->getRegisteredFriends();
 				
 		$data = array(
             'friendsArray' => $friendsArray,

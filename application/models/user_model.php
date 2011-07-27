@@ -48,12 +48,6 @@ class User_model extends CI_Model {
 		$query = $this->db->get_where('user', array('fb_id' => $fb_id), 1);
 		return $this->User_model->getNew($query);
 	}
-	public function byFriends($friends)
-	{
-		$this->db->where_in('uid', $friends);
-		$query = $this->db->get('user');
-		return $this->User_model->getNew($query,true);
-	}
 	private function getNew($query, $array = false)
 	{
 		if ($query->num_rows() > 0)
@@ -129,25 +123,70 @@ class User_model extends CI_Model {
 	public function getLastLogin() {
 		return $this->last_login;
 	}
-	public function getRegisteredFriends(){
-		$fql = "SELECT uid FROM user WHERE uid IN (SELECT uid2 FROM friend WHERE uid1 = me()) AND is_app_user = 1";
- 
-		$response = $this->facebook->api(array(
-			'method' => 'fql.query',
-			'query' =>$fql,
-		));
-		foreach ($response as $key => $val) {
-		  $response[$key] = $response[$key]['uid'];
-		}
+	public function getFriendsInDatabase()
+	{
+			$this->db->select('*');
+			$this->db->from('friends')->where('friends.user_id',$this->getID());
+			$this->db->join('user', 'friends.friend_id = user.user_id');
+			return $this->db->get();
+	}
+	public function getRegisteredFriends($update = false, $limit = 100, $offset = 0){
+		$friend = NULL; // Must predefine it incase the loop isn't called
 		
-		$friendsArray = User_model::byFriends($response, true);
+        if ($update == true) // updates the specific users friends
+        {
+			$fql = "SELECT uid FROM user WHERE uid IN (SELECT uid2 FROM friend WHERE uid1 = me()) AND is_app_user = 1";
+ 
+			$response = $this->facebook->api(array(
+				'method' => 'fql.query',
+				'query' =>$fql,
+			));
+			foreach ($response as $key => $val) {
+		  		$response[$key] = $response[$key]['uid'];
+			}
+			// finds Facebook friends that need to be added
+			$this->db->where_in('uid', $response);
+			$query = $this->db->get('user');
+			foreach($query->result() as $row)
+				$facebookFriends[] = $row->user_id;
+
+			// finds current friends
+			$friends_query = $this->db->get_where('friends', array('user_id' => $this->getID()));
+				
+			if ($friends_query->num_rows() > 0) // if they already have some friends
+			{
+				foreach($friends_query->result() as $row)  // finds the friend's id
+					$currentFriends[] = $row->friend_id;
+					
+				$results = array_diff($facebookFriends,$currentFriends); // difference between current and future friends
+				foreach($results as $user)
+				{
+					$friend[] = array('user_id' => $this->getID(), 'friend_id' => $user); // User is friends with
+					$friend[] = array('user_id' => $user, 'friend_id' => $this->getID()); // friend with user
+				}		
+				if (is_array($friend))
+					$this->db->insert_batch('friends', $friend); // insert friends
+         	}
+         	else // they don't and we need to add everyone.
+         	{
+				foreach($facebookFriends as $friendID)
+				{
+					$friend[] = array('user_id' => $this->getID(), 'friend_id' => $friendID); // User is friends with
+					$friend[] = array('user_id' => $friendID, 'friend_id' => $this->getID()); // friend with user
+				}
+				if (is_array($friend))
+					$this->db->insert_batch('friends', $friend); // insert friends
+         	}
+        }
+        else // returns the specific persons saved friends.
+			$query = $this->getFriendsInDatabase();
+		
+        $friendsArray = User_model::getNew($query,true);
 		return $friendsArray;
 	}
 	public function getUsers() {
-		$query = $this->db->get('user');
-          
+		$query = $this->db->get('user');       
        	return $this->User_model->getNew($query,true);
-
 	}
 	
 	/*
@@ -155,16 +194,16 @@ class User_model extends CI_Model {
 								SECTION: UPDATE_METHODS
 	***********************************************************************************
 	*/
-	public function login($user)
+	public function login()
     {
-    	$this->User_model->updateLastLogin($user);
-		$this->session->set_userdata($user); // This array contains all the user FB information
+    	$this->updateLastLogin();
+		$this->session->set_userdata($this); // This array contains all the user FB information
     }
-	private function updateLastLogin($user) {
+	private function updateLastLogin() {
 		$time = date("Y-m-d H:i:s");
-		$user->setLastLogin($time);
-		$this->db->set($user);
-		$this->db->where('user_id', $user->getID());
+		$this->setLastLogin($time);
+		$this->db->set($this);
+		$this->db->where('user_id', $this->getID());
 		$this->db->update('user');
 	}
 	/*
