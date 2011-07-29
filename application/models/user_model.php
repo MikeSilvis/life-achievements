@@ -23,19 +23,19 @@ class User_model extends CI_Model {
 			$this->setID                ($params['user_id']);
 			$this->setFBID           	($params['fb_id']);
 			$this->setUID				($params['uid']);
-            $this->setName 				($params['name']);
+			$this->setName 				($params['name']);
 			$this->setEmail      		($params['email']);
 			$this->setBirthdate         ($params['birthdate']);
 			$this->setLocation          ($params['location']);
-			$this-setFBLocationID		($params['fb_location_id']);
-			$this-setRegistered			($params['registered']);
-			$this-setLastLogin			($params['last_login']);
-			
+			$this->setFBLocationID		($params['fb_location_id']);
+			$this->setRegistered		($params['registered']);
+			$this->setLastLogin			($params['last_login']);
+			$this->setPrivileges			($params['privileges']);	
 		}
 	}
-    /*
+	/*
 	***********************************************************************************
-								SECTION: BUILD_USER
+	SECTION: BUILD_USER
 	***********************************************************************************
 	*/
 	public function byID($user_id)
@@ -65,21 +65,22 @@ class User_model extends CI_Model {
 				$tempUser->setFBLocationID($row->fb_location_id);
 				$tempUser->setRegistered($row->registered);
 				$tempUser->setLastLogin($row->last_login);
-		
+				$tempUser->setPrivileges($row->privileges);
+				
 				// This allows for the function to either return an array of users or a single user
 				if ($array == false)
 					$user = $tempUser;
 				else
 					$user[] = $tempUser;
-			}				
-			return $user;
+			}
+				return $user;
 		}
 		else
-			return false;
+				return false;
 	}
-    /*
+	    /*
 	***********************************************************************************
-								SECTION: GET_METHODS
+	SECTION: GET_METHODS
 	***********************************************************************************
 	*/
 	public function getID(){
@@ -104,11 +105,11 @@ class User_model extends CI_Model {
 		// Convert SQL date to individual Y/M/D variables
 		list($Y,$m,$d) = explode("-",$this->birthdate);
 		$age = date("Y") - $Y;
-	
+		
 		// If the birthday has not yet come this year
 		if(date("md") < $m.$d )
-			$age--;
-			
+		$age--;
+		
 		return $age;
 	}
 	public function getLocation() {
@@ -123,82 +124,80 @@ class User_model extends CI_Model {
 	public function getLastLogin() {
 		return $this->last_login;
 	}
+	public function getPrivileges(){
+		return $this->privileges;
+	}
 	public function getFriendsInDatabase()
 	{
-			$this->db->select('*');
-			$this->db->from('friends')->where('friends.user_id',$this->getID());
-			$this->db->join('user', 'friends.friend_id = user.user_id');
-			return $this->db->get();
+		$this->db->select('*');
+		$this->db->from('friends')->where('friends.user_id',$this->getID());
+		$this->db->join('user', 'friends.friend_id = user.user_id');
+		$query =  $this->db->get();
+		return $this->getNew($query,true);
 	}
-	public function getRegisteredFriends($update = false, $limit = 100, $offset = 0){
-		$friend = NULL; // Must predefine it incase the loop isn't called
+	public function getRegisteredFriends(){ // used to either update or retrieve current friends
+			$friend = NULL; // Must predefine it incase the loop isn't called
 		
-        if ($update == true) // updates the specific users friends
-        {
+
 			$fql = "SELECT uid FROM user WHERE uid IN (SELECT uid2 FROM friend WHERE uid1 = me()) AND is_app_user = 1";
- 
+			 
 			$response = $this->facebook->api(array(
 				'method' => 'fql.query',
 				'query' =>$fql,
 			));
-			foreach ($response as $key => $val) {
-		  		$response[$key] = $response[$key]['uid'];
-			}
+			foreach ($response as $key => $val)
+			  $response[$key] = $response[$key]['uid'];
+			  
 			// finds Facebook friends that need to be added
 			$this->db->where_in('uid', $response);
 			$query = $this->db->get('user');
 			foreach($query->result() as $row)
-				$facebookFriends[] = $row->user_id;
-
+			$facebookFriends[] = $row->user_id;
+			
 			// finds current friends
 			$friends_query = $this->db->get_where('friends', array('user_id' => $this->getID()));
-				
+			
 			if ($friends_query->num_rows() > 0) // if they already have some friends
 			{
-				foreach($friends_query->result() as $row)  // finds the friend's id
-					$currentFriends[] = $row->friend_id;
-					
-				$results = array_diff($facebookFriends,$currentFriends); // difference between current and future friends
-				foreach($results as $user)
-				{
-					$friend[] = array('user_id' => $this->getID(), 'friend_id' => $user); // User is friends with
-					$friend[] = array('user_id' => $user, 'friend_id' => $this->getID()); // friend with user
-				}		
-				if (is_array($friend))
-					$this->db->insert_batch('friends', $friend); // insert friends
-         	}
-         	else // they don't and we need to add everyone.
-         	{
-				foreach($facebookFriends as $friendID)
-				{
+			foreach($friends_query->result() as $row)  // finds the friend's id
+			$currentFriends[] = $row->friend_id;
+			
+			$results = array_diff($facebookFriends,$currentFriends); // difference between current and future friends
+			foreach($results as $user)
+			{
+			$friend[] = array('user_id' => $this->getID(), 'friend_id' => $user); // User is friends with
+			$friend[] = array('user_id' => $user, 'friend_id' => $this->getID()); // friend with user
+			}
+			if (is_array($friend))
+				$this->db->insert_batch('friends', $friend); // insert friends
+			 }
+			else // they don't and we need to add everyone.
+			{
+				foreach($facebookFriends as $friendID) {
 					$friend[] = array('user_id' => $this->getID(), 'friend_id' => $friendID); // User is friends with
 					$friend[] = array('user_id' => $friendID, 'friend_id' => $this->getID()); // friend with user
 				}
 				if (is_array($friend))
 					$this->db->insert_batch('friends', $friend); // insert friends
-         	}
-        }
-        else // returns the specific persons saved friends.
-			$query = $this->getFriendsInDatabase();
+			}
 		
-        $friendsArray = User_model::getNew($query,true);
-		return $friendsArray;
-	}
-	public function getUsers() {
+		   	return User_model::getNew($query,true);
+		}
+		public function getUsers() {
 		$query = $this->db->get('user');       
-       	return $this->User_model->getNew($query,true);
-	}
-	
+		       return $this->User_model->getNew($query,true);
+		}
+
 	/*
 	***********************************************************************************
-								SECTION: UPDATE_METHODS
+	SECTION: UPDATE_METHODS
 	***********************************************************************************
 	*/
-	public function login()
-    {
-    	$this->updateLastLogin();
+	public function login() {
+	    $this->updateLastLogin(); // updates last login
+	    $this->getRegisteredFriends(); // pulls new friends when logging in
 		$this->session->set_userdata($this); // This array contains all the user FB information
-    }
+	}
 	private function updateLastLogin() {
 		$time = date("Y-m-d H:i:s");
 		$this->setLastLogin($time);
@@ -208,38 +207,42 @@ class User_model extends CI_Model {
 	}
 	/*
 	***********************************************************************************
-								SECTION: SET_METHODS
+	SECTION: SET_METHODS
 	***********************************************************************************
 	*/
-	function setID($user_id) {					// 20
+	function setID($user_id) {// 20
 		$this->user_id = $user_id;
 	}
-	function setFbID($fb_id) {					// 34234234
+	function setFbID($fb_id) {// 34234234
 		$this->fb_id = $fb_id;
 	}
-	function setUID($uid) {						// 1476420296
+	function setUID($uid) {// 1476420296
 		$this->uid = $uid;
 	}
-	function setName($name) {					// Mike Silvis
+	function setName($name) {// Mike Silvis
 		$this->name = $name;
-	}	
-	function setEmail($email) {					// MikeSilvis@gmail.com
+	}
+	function setEmail($email) {// MikeSilvis@gmail.com
 		$this->email = $email;
 	}
-	function setBirthdate($birthdate) {			// 1990-05-04
+	function setBirthdate($birthdate) {// 1990-05-04
 		$this->birthdate = $birthdate;
 	}
-	function setLocation($location) {			// Bellevue, Wa
+	function setLocation($location) {// Bellevue, Wa
 		$this->location = $location;
 	}
-	function setFbLocationID($fb_location_id) {	// 2147483647
+	function setFbLocationID($fb_location_id) {// 2147483647
 		$this->fb_location_id = $fb_location_id;
 	}
-	function setRegistered($registered) {		// 2011-07-16 01:09:46
+	function setRegistered($registered) {// 2011-07-16 01:09:46
 		$this->registered = $registered;
 	}
-	function setLastLogin($last_login) {		// 2011-07-16 13:09:46
+	function setLastLogin($last_login) {// 2011-07-16 13:09:46
 		$this->last_login = $last_login;
+	}
+	public function setPrivileges($privileges) // 1 = disabled, 3 = normal, 5 = moderator, 9 = admin
+	{
+		$this->privileges = $privileges;
 	}
     public function register_facebook($fb_data) // registers a new user from facebook
     {
@@ -248,14 +251,14 @@ class User_model extends CI_Model {
 		$birthday = $birthday_array[2] ."-". $birthday_array[0] ."-". $birthday_array[1]; // formats date properly for insertion
 		
 		$user = array(
-			'name' => $fb_data['me']['name'] ,
-			'fb_id' => $fb_data['me']['id'],
-			'uid' => $fb_data['uid'],
-			'email' => $fb_data['me']['email'] ,
-			'birthdate' => $birthday ,
-			'location' => $fb_data['me']['location']['name'] ,
-			'fb_location_id' => $fb_data['me']['location']['id'],
-			'registered' => $registered_time,
+		'name' => $fb_data['me']['name'] ,
+		'fb_id' => $fb_data['me']['id'],
+		'uid' => $fb_data['uid'],
+		'email' => $fb_data['me']['email'] ,
+		'birthdate' => $birthday ,
+		'location' => $fb_data['me']['location']['name'] ,
+		'fb_location_id' => $fb_data['me']['location']['id'],
+		'registered' => $registered_time,
 		);
 		$this->db->insert('user', $user); // The user has just registered. Add them.
 		

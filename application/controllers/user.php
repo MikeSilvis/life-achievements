@@ -9,7 +9,11 @@ class User extends CI_Controller {
         $this->fb_data = $this->session->userdata('fb_data'); // This array contains all the user FB information
         $this->user_id = $this->session->userdata('user_id'); // This array contains all the user FB information
 	}
-
+	function index()
+	{
+	 	// currently used as a place holder redirect to login
+	 	redirect('/user/process');
+	}
 	function process()
 	{
 		$data = array(
@@ -39,10 +43,7 @@ class User extends CI_Controller {
 		if (!is_object($user))
 			redirect('/user/process'); // redirect to their profile.
 
-      	if (($this->fb_data['me']) && ($user_id == $this->user_id)) // Only ask for friends if the user is logged in.
-              $friendsArray = $user->getRegisteredFriends(true);
-      	else
-              $friendsArray = $user->getRegisteredFriends();
+        $friendsArray = $user->getFriendsInDatabase();
 				
 		$data = array(
             'friendsArray' => $friendsArray,

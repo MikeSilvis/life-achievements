@@ -52,7 +52,7 @@ $autoload['packages'] = array(APPPATH.'third_party');
 |	$autoload['libraries'] = array('database', 'session', 'xmlrpc');
 */
 
-$autoload['libraries'] = array('database', 'template','session');
+$autoload['libraries'] = array('database', 'template','session','form_validation');
 
 
 /*
@@ -109,7 +109,7 @@ $autoload['language'] = array();
 |
 */
 
-$autoload['model'] = array('Facebook_model','User_model');
+$autoload['model'] = array('Facebook_model','User_model','Achievement_model');
 
 
 /* End of file autoload.php */
