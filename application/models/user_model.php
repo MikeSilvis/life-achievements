@@ -30,7 +30,7 @@ class User_model extends CI_Model {
 			$this->setFBLocationID		($params['fb_location_id']);
 			$this->setRegistered		($params['registered']);
 			$this->setLastLogin			($params['last_login']);
-			$this->setPrivileges			($params['privileges']);	
+			$this->setPrivileges		($params['privileges']);	
 		}
 	}
 	/*
@@ -194,16 +194,17 @@ class User_model extends CI_Model {
 	***********************************************************************************
 	*/
 	public function login() {
-	    $this->updateLastLogin(); // updates last login
+	   	$time = date("Y-m-d H:i:s");
+		$this->setLastLogin($time);
 	    $this->getRegisteredFriends(); // pulls new friends when logging in
+	    $this->update();
 		$this->session->set_userdata($this); // This array contains all the user FB information
 	}
-	private function updateLastLogin() {
-		$time = date("Y-m-d H:i:s");
-		$this->setLastLogin($time);
+	public function update()
+	{
 		$this->db->set($this);
 		$this->db->where('user_id', $this->getID());
-		$this->db->update('user');
+		$this->db->update('user');	    
 	}
 	/*
 	***********************************************************************************

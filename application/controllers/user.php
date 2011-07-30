@@ -34,6 +34,12 @@ class User extends CI_Controller {
 		$this->template->write_view('content', 'user/main/process',$data);	
 		$this->template->render();
 	}
+	function logout()
+	{
+		$this->session->unset_userdata($this);
+	    $this->session->sess_destroy();
+	    redirect('/achievement/display');
+	}
 	function profile()
 	{
 		$user_id = (int)$this->uri->segment(3);

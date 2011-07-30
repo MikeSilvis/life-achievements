@@ -11,6 +11,7 @@ class Achievement_model extends CI_Model {
   	public $badge_picture;
   	public $categoryName;
   	public $category_id;
+  	public $point;
 
     function Achievement($params = NULL)
 	{
@@ -21,7 +22,8 @@ class Achievement_model extends CI_Model {
 			$this->setDescription		($params['description']);
             $this->setAvatar			($params['badgePic']);	
             $this->setCategory			($params['category']);	
-            $this->categoryID			($params['categoryID']);	
+            $this->setCategoryID		($params['categoryID']);
+            $this->setPoint				($params['point']);
 		}
 	}
 	/*
@@ -29,11 +31,16 @@ class Achievement_model extends CI_Model {
 	SECTION: BUILD_ACHIEVEMENTS
 	***********************************************************************************
 	*/
-	public function byID($achievement_id)
-	{
-		$this->db->select('achievement_id, achievement.category_id AS category_id, achievement.name, description, badge_picture, achievement_category.name AS category');
+  	public function Select()
+  	{
+		$this->db->select('achievement_id, achievement.category_id AS category_id, achievement.name, description, badge_picture, achievement_category.name AS category, point');
 		$this->db->from('achievement');
 		$this->db->join('achievement_category', 'achievement_category.category_id = achievement.category_id');
+		return $this->db;
+  	}
+	public function byID($achievement_id)
+	{
+		$this->Achievement_model->Select();
 		$this->db->where('achievement_id', $achievement_id);
 		$query = $this->db->get();
 		return Achievement_model::getNew($query);
@@ -51,6 +58,7 @@ class Achievement_model extends CI_Model {
                 $tempAchievement->setAvatar($row->badge_picture);
                 $tempAchievement->setCategory($row->category);
                 $tempAchievement->setCategoryID($row->category_id);
+                $tempAchievement->setPoint($row->point);
 
 				
 				// This allows for the function to either return an array of achievements or a single achievement
@@ -69,6 +77,15 @@ class Achievement_model extends CI_Model {
 	SECTION: BUILD_METHODS
 	***********************************************************************************
 	*/
+	public function achievementParams(){ // used to prep the achievement table for modification
+	    return  array(
+	    				'name'=>$this->getName(),
+	    				'category_id'=>$this->getCategoryID(), 
+	    				'description'=>$this->getDescription(), 
+	    				'badge_picture'=> $this->getAvatar(),
+	    				'point'=>$this->getPoint(),
+	    				);
+	}
 	public function update($params = array()) { // updates the achievement object if a post value has been set and then updates the database
 		if ($params['name'])
 			$this->setName($params['name']);
@@ -78,11 +95,13 @@ class Achievement_model extends CI_Model {
 			$this->setAvatar($params['badgePic']);
 		if ($params['category'])
 			$this->setCategoryID($params['category']);
+		if ($params['point'])
+			$this->setPoint($params['point']);
 		
-		$updateParams = array('name'=>$this->getName(),'category_id'=>$this->getCategoryID(), 'description'=>$this->getDescription(), 'badge_picture'=> $this->getAvatar());
+		$updateParams = $this->achievementParams();
 	    $this->db->update('achievement', $updateParams, "achievement_id = ".$this->getID()); // go ahead and finalize the database
 	}
-	public function insert($parmas = array()) {
+	public function insert($params = array()) {
 		if ($params['name'])
 			$this->setName($params['name']);
 		if ($params['description'])
@@ -91,8 +110,10 @@ class Achievement_model extends CI_Model {
 			$this->setAvatar($params['badgePic']);
 		if ($params['category'])
 			$this->setCategoryID($params['category']);
+		if ($params['point'])
+			$this->setPoint($params['point']);
 		
-		$updateParams = array('name'=>$this->getName(),'category_id'=>$this->getCategoryID(), 'description'=>$this->getDescription(), 'badge_picture'=> $this->getAvatar());
+		$updateParams = $this->achievementParams();
 		$this->db->insert('achievement', $updateParams); // Go ahead and add it to the database   
 	}
 	/*
@@ -118,11 +139,12 @@ class Achievement_model extends CI_Model {
   	public function getCategoryID(){
     	return $this->category_id;
   	}
+  	public function getPoint(){
+  	    return $this->point;
+  	}
 	public function getAllAchievements()
 	{
-		$this->db->select('achievement_id, achievement.category_id AS category_id, achievement.name, description, badge_picture, achievement_category.name AS category');
-		$this->db->from('achievement');
-		$this->db->join('achievement_category', 'achievement_category.category_id = achievement.category_id');
+		$this->Achievement_model->Select();
 		$this->db->order_by("name", "ASC"); 
 		$query = $this->db->get();
         return Achievement_model::getNew($query,true);
@@ -143,6 +165,7 @@ class Achievement_model extends CI_Model {
 	public function getCategories()
 	{
 		$categoryArray = array();
+		$this->db->order_by('name','ASC');
 	    $query =  $this->db->get('achievement_category');
 	    foreach($query->result() as $row)
 		{
@@ -173,6 +196,9 @@ class Achievement_model extends CI_Model {
 	}
   	function setCategoryID($categoryID) {// 1
 		$this->category_id = $categoryID;
+	}
+	function setPoint($point){
+	    $this->point = $point;
 	}
 }
 ?>

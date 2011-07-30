@@ -19,10 +19,18 @@
 ?>
 	<div id="header">
 		<h1>Welcome to Life Achievements</h1>
-		<?=anchor('achievement/display', 'Display Achievements')?>
-        <br>
-        <?=$this->session->userdata('name');?>
-          Your Privileges are: <?=$this->session->userdata('privileges');?>
+		<?
+			if ($this->session->userdata('user_id')) {   
+				echo $this->session->userdata('name');
+				echo " | Privileges: ". $this->session->userdata('privileges');				
+				echo " | ". anchor('user/profile/'.$this->session->userdata('user_id'), 'Your Profile');
+				echo " | ". anchor('user/logout','Log out');
+			}
+			else 
+			    echo " | ". anchor('user/process', 'Login');
+			    
+			echo " | ".anchor('achievement/display', 'Display Achievements');				
+		?>
 	</div>
 	<div id="content">
 		<?=$content?>
