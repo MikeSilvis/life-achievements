@@ -40,12 +40,12 @@ class User_model extends CI_Model {
 	*/
 	public function byID($user_id)
 	{
-		$query = $this->db->get_where('user', array('user_id' => $user_id), 1);
+		$query = $this->db->get_where('users', array('user_id' => $user_id), 1);
 		return $this->User_model->getNew($query);
 	}
 	public function byFBID($fb_id)
 	{
-		$query = $this->db->get_where('user', array('fb_id' => $fb_id), 1);
+		$query = $this->db->get_where('users', array('fb_id' => $fb_id), 1);
 		return $this->User_model->getNew($query);
 	}
 	private function getNew($query, $array = false)
@@ -131,7 +131,7 @@ class User_model extends CI_Model {
 	{
 		$this->db->select('*');
 		$this->db->from('friends')->where('friends.user_id',$this->getID());
-		$this->db->join('user', 'friends.friend_id = user.user_id');
+		$this->db->join('users', 'friends.friend_id = users.user_id');
 		$query =  $this->db->get();
 		return $this->getNew($query,true);
 	}
@@ -150,7 +150,7 @@ class User_model extends CI_Model {
 			  
 			// finds Facebook friends that need to be added
 			$this->db->where_in('uid', $response);
-			$query = $this->db->get('user');
+			$query = $this->db->get('users');
 			foreach($query->result() as $row)
 			$facebookFriends[] = $row->user_id;
 			
@@ -184,7 +184,7 @@ class User_model extends CI_Model {
 		   	return User_model::getNew($query,true);
 		}
 		public function getUsers() {
-		$query = $this->db->get('user');       
+		$query = $this->db->get('users');       
 		       return $this->User_model->getNew($query,true);
 		}
 
@@ -204,7 +204,7 @@ class User_model extends CI_Model {
 	{
 		$this->db->set($this);
 		$this->db->where('user_id', $this->getID());
-		$this->db->update('user');	    
+		$this->db->update('users');	    
 	}
 	/*
 	***********************************************************************************
@@ -261,7 +261,7 @@ class User_model extends CI_Model {
 		'fb_location_id' => $fb_data['me']['location']['id'],
 		'registered' => $registered_time,
 		);
-		$this->db->insert('user', $user); // The user has just registered. Add them.
+		$this->db->insert('users', $user); // The user has just registered. Add them.
 		
 		$id = $this->db->insert_id(); // has an error
 		$user = User_model::byID($id);

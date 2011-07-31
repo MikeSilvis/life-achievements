@@ -33,9 +33,9 @@ class Achievement_model extends CI_Model {
 	*/
   	public function Select()
   	{
-		$this->db->select('achievement_id, achievement.category_id AS category_id, achievement.name, description, badge_picture, achievement_category.name AS category, point');
-		$this->db->from('achievement');
-		$this->db->join('achievement_category', 'achievement_category.category_id = achievement.category_id');
+		$this->db->select('achievement_id, achievements.category_id AS category_id, achievements.name, description, badge_picture, achievement_categories.name AS category, point');
+		$this->db->from('achievements');
+		$this->db->join('achievement_categories', 'achievement_categories.category_id = achievements.category_id');
 		return $this->db;
   	}
 	public function byID($achievement_id)
@@ -99,7 +99,7 @@ class Achievement_model extends CI_Model {
 			$this->setPoint($params['point']);
 		
 		$updateParams = $this->achievementParams();
-	    $this->db->update('achievement', $updateParams, "achievement_id = ".$this->getID()); // go ahead and finalize the database
+	    $this->db->update('achievements', $updateParams, "achievement_id = ".$this->getID()); // go ahead and finalize the database
 	}
 	public function insert($params = array()) {
 		if ($params['name'])
@@ -114,7 +114,7 @@ class Achievement_model extends CI_Model {
 			$this->setPoint($params['point']);
 		
 		$updateParams = $this->achievementParams();
-		$this->db->insert('achievement', $updateParams); // Go ahead and add it to the database   
+		$this->db->insert('achievements', $updateParams); // Go ahead and add it to the database   
 	}
 	/*
 	***********************************************************************************
@@ -152,7 +152,7 @@ class Achievement_model extends CI_Model {
 	public function getCategoryByID($categoryID)
 	{
 		$category = array();
-	    $query = $this->db->get_where('achievement_category', array('category_id' => $categoryID), 1);
+	    $query = $this->db->get_where('achievement_categories', array('category_id' => $categoryID), 1);
 	    if ($query->num_rows() > 0)
 		{
    			$row = $query->row();
@@ -166,7 +166,7 @@ class Achievement_model extends CI_Model {
 	{
 		$categoryArray = array();
 		$this->db->order_by('name','ASC');
-	    $query =  $this->db->get('achievement_category');
+	    $query =  $this->db->get('achievement_categories');
 	    foreach($query->result() as $row)
 		{
 			$categoryArray[$row->category_id] = $row->name;
