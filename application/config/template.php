@@ -60,6 +60,7 @@ $template['default']['template'] = 'default/template';
 $template['default']['regions'] = array(
 	'title',
     'header',
+    'holder',
     'content',
     'sideBar',
     'footer',

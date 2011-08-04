@@ -1,4 +1,5 @@
 <?php
+
 class Achievement_model extends CI_Model {
 
     public function __construct()
@@ -13,19 +14,6 @@ class Achievement_model extends CI_Model {
   	public $category_id;
   	public $point;
 
-    function Achievement($params = NULL)
-	{
-		if(is_array($params))
-		{
-			$this->setID                ($params['achievement_id']);
-			$this->setName           	($params['name']);
-			$this->setDescription		($params['description']);
-            $this->setAvatar			($params['badgePic']);	
-            $this->setCategory			($params['category']);	
-            $this->setCategoryID		($params['categoryID']);
-            $this->setPoint				($params['point']);
-		}
-	}
 	/*
 	***********************************************************************************
 	SECTION: BUILD_ACHIEVEMENTS
@@ -38,12 +26,19 @@ class Achievement_model extends CI_Model {
 		$this->db->join('achievement_categories', 'achievement_categories.category_id = achievements.category_id');
 		return $this->db;
   	}
-	public function byID($achievement_id)
+	public function byID($achievementID)
 	{
+		$achievementID = (int)$achievementID;
 		$this->Achievement_model->Select();
-		$this->db->where('achievement_id', $achievement_id);
+		$this->db->where('achievement_id', $achievementID);
 		$query = $this->db->get();
 		return Achievement_model::getNew($query);
+	}
+	public function userAchievements($achievementArrayID){
+		$this->Achievement_model->Select();
+		$this->db->where_in('achievement_id', $achievementArrayID);
+		$query = $this->db->get();
+		return Achievement_model::getNew($query,true);		
 	}
 	private function getNew($query, $array = false)
 	{

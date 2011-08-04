@@ -109,7 +109,7 @@ $autoload['language'] = array();
 |
 */
 
-$autoload['model'] = array('Facebook_model','User_model','Achievement_model');
+$autoload['model'] = array('Facebook_model','User_model','Achievement_model','Userach_model');
 
 
 /* End of file autoload.php */

@@ -4,9 +4,48 @@
 }
 
 #header {
+	margin: 0 auto;
+	width: 800px;
+	background-color: #494949;
+	-moz-border-radius-bottomright: 20px;
+	border-bottom-right-radius: 20px;
+	-moz-border-radius-bottomleft: 20px;
+	border-bottom-left-radius: 20px;
+	height: 40px;
+	color: #fff;
+	padding-top: 10px
+}
+
+#logo {
 	float: left;
-	width: 1000px;
-	padding-bottom: 30px
+	width: 200px;
+	height: 30px;
+	padding-left: 20px;
+	background-image: url(../img/site/search.png) no-repeat
+}
+
+#search {
+	float: right;
+	width: 200px;
+	padding-right: 20px;
+	padding-top: 2px;
+	text-align: right
+}
+
+#userInfo {
+	float: right;
+	color: #fff;
+	width: 200px;
+	height: 37px;
+	padding-top: 6px;
+	text-align: right;
+	padding-right: 20px
+}
+
+#holder {
+	float: left;
+	padding: 10px;
+	width: 980px
 }
 
 #content {
@@ -19,8 +58,67 @@
 	width: 300px
 }
 
+#footer-top {
+	float: left;
+	background-repeat: repeat-x;
+	background-image: url(../img/site/footer.png);
+	height: 5px;
+	width: 100%;
+	margin: 0
+}
+
 #footer {
 	float: left;
 	width: 1000px;
-	padding-top: 30px
+	background-color: #000;
+	color: #fff;
+	margin: 0;
+	padding: 5px
+}
+
+#achievements {
+	float: left;
+	width: 300px
+}
+
+#comments {
+	float: left;
+	width: 380px
+}
+
+#friends {
+	float: right;
+	width: 300px
+}
+
+#avatarPics {
+	float: left;
+	width: 100px;
+	padding-top: 10px
+}
+
+#userBio {
+	float: left;
+	width: 200px;
+	padding-top: 10px
+}
+
+/* Friends Holder */
+.friendHolder {
+	float: left;
+	width: 100%;
+	clear: both;
+	height: 50px;
+	margin-bottom: 10px;
+}
+
+.friendContent {
+	float: right;
+	padding-left: 10px;
+	width: 220px
+}
+
+.friendText {
+	width: 170px;
+	float: left
 }

@@ -1,6 +1,5 @@
 <html>
 <head>
-  
 <title><?=$title;?></title>
 <link rel="stylesheet" href='<?=base_url()?>assets/css/layout.css' type="text/css" media="screen, projection" /> 
 <link rel="stylesheet" href='<?=base_url()?>assets/css/style.css' type="text/css" media="screen, projection" /> 
@@ -13,29 +12,42 @@
 <div id="wrapper">
 <?
 	if ($this->session->flashdata('success') != NULL)
-		echo "<p style='color:green'>".$this->session->flashdata('success')."</p>";
+		echo "<div style='color:green'>".$this->session->flashdata('success')."</div>";
 	else if( $this->session->flashdata('error') != NULL)
-		echo "<p style='color:red'>".$this->session->flashdata('error')."</p>";
+		echo "<div style='color:red'>".$this->session->flashdata('error')."</div>";
 ?>
 	<div id="header">
-		<h1>Welcome to Life Achievements</h1>
-		<?
-			if ($this->session->userdata('user_id')) {   
-				echo $this->session->userdata('name');
-				echo " | Privileges: ". $this->session->userdata('privileges');				
-				echo " | ". anchor('user/profile/'.$this->session->userdata('user_id'), 'Your Profile');
-				echo " | ". anchor('user/logout','Log out');
-			}
-			else 
-			    echo " | ". anchor('user/process', 'Login');
-			    
-			echo " | ".anchor('achievement/display', 'Display Achievements');				
-		?>
+		<div id="logo"></div>
+		<div id="search">
+			<form>
+				<input type="text" value="Search" id="searchBox">
+			</form>
+		</div>
+		<div id="userInfo">
+			<?
+				if ($this->session->userdata('user_id')) {   		
+					echo anchor('user/profile/'.$this->session->userdata('user_id'), $this->session->userdata('name'));
+					echo " | ". anchor('user/logout','Log out');
+				}
+				else 
+				    echo '<a href="'.$fb_data["loginUrl"].'&scope=email,user_birthday,user_location">login</a>';			
+			?>			
+		</div>
+	</div>
+	<div id="holder">
+		<?=$holder?>
 	</div>
 	<div id="content">
 		<?=$content?>
 	</div>
-	<div id="sideBar"><?=$sideBar;?></div>
+	<div id="sideBar">
+		<?=$sideBar;?>
+	</div>
+</div>
+
+<!--<div id="footer-top"></div>-->
+
+<div id="wrapper">
 	<div id="footer">Page rendered in {elapsed_time} seconds</div>
 </div>
 

@@ -1,4 +1,5 @@
 <?php
+
 class User_model extends CI_Model {
 
     public function __construct()
@@ -15,24 +16,8 @@ class User_model extends CI_Model {
     public $fb_location_id;
     public $registered;
     public $last_login;
+    
 
-    function User($params = NULL)
-	{
-		if(is_array($params))
-		{
-			$this->setID                ($params['user_id']);
-			$this->setFBID           	($params['fb_id']);
-			$this->setUID				($params['uid']);
-			$this->setName 				($params['name']);
-			$this->setEmail      		($params['email']);
-			$this->setBirthdate         ($params['birthdate']);
-			$this->setLocation          ($params['location']);
-			$this->setFBLocationID		($params['fb_location_id']);
-			$this->setRegistered		($params['registered']);
-			$this->setLastLogin			($params['last_login']);
-			$this->setPrivileges		($params['privileges']);	
-		}
-	}
 	/*
 	***********************************************************************************
 	SECTION: BUILD_USER
@@ -40,11 +25,13 @@ class User_model extends CI_Model {
 	*/
 	public function byID($user_id)
 	{
+		$user_id = (int)$user_id;
 		$query = $this->db->get_where('users', array('user_id' => $user_id), 1);
 		return $this->User_model->getNew($query);
 	}
 	public function byFBID($fb_id)
 	{
+		$fb_id = (int)$fb_id;
 		$query = $this->db->get_where('users', array('fb_id' => $fb_id), 1);
 		return $this->User_model->getNew($query);
 	}
@@ -67,7 +54,7 @@ class User_model extends CI_Model {
 				$tempUser->setLastLogin($row->last_login);
 				$tempUser->setPrivileges($row->privileges);
 				
-				// This allows for the function to either return an array of users or a single user
+				// Determines array of users or single user
 				if ($array == false)
 					$user = $tempUser;
 				else
@@ -78,7 +65,7 @@ class User_model extends CI_Model {
 		else
 				return false;
 	}
-	    /*
+	/*
 	***********************************************************************************
 	SECTION: GET_METHODS
 	***********************************************************************************
@@ -186,8 +173,7 @@ class User_model extends CI_Model {
 		public function getUsers() {
 		$query = $this->db->get('users');       
 		       return $this->User_model->getNew($query,true);
-		}
-
+	}
 	/*
 	***********************************************************************************
 	SECTION: UPDATE_METHODS

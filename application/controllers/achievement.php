@@ -56,18 +56,17 @@ class Achievement extends CI_Controller {
 		$this->template->write_view('content', 'achievement/main/display',$data);	
 		$this->template->render(); 
     }
-  	function update()
+  	function update($achievement_id)
     {	
     	if ($this->privileges < 5) // ensure security and only let moderators and admin view
     		redirect('/achievement/index');
-    		
-    	// find the specific achievement we are about to update
-      	$achievement_id = (int)$this->uri->segment(3);
-		        							
-		if ($this->uri->segment(3) != NULL)
+    	$achievement = Achievement_model::byID($achievement_id);
+      							
+		if ($achievement_id != NULL)
 			$achievement = Achievement_model::byID($achievement_id);			
 		if (!is_object($achievement))
                   redirect('/achievement/display'); // redirect to all achievements.
+
 		
 		if ($this->form_validation->run('achievement') == TRUE) // form has been submitted and passes all error checking
 		{
