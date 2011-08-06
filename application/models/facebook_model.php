@@ -1,6 +1,6 @@
-<?php
+<?php 
 class Facebook_model extends CI_Model {
- 
+ /*
     public function __construct()
     {
         parent::__construct();
@@ -40,6 +40,7 @@ class Facebook_model extends CI_Model {
                     );
  
         $this->session->set_userdata('fb_data', $fb_data);
+        redirect('/user/process');
     }
-}
+*/}
 ?>

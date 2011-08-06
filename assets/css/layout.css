@@ -97,10 +97,10 @@
 	padding-top: 10px
 }
 
-#userBio {
+.userBio {
 	float: left;
 	width: 200px;
-	padding-top: 10px
+	padding-top: 10px;
 }
 
 /* Friends Holder */
@@ -117,8 +117,10 @@
 	padding-left: 10px;
 	width: 220px
 }
-
 .friendText {
+	float:left;
 	width: 170px;
-	float: left
+}
+.friendText a{
+	color:black !important;
 }

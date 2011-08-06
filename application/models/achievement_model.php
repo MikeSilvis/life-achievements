@@ -169,6 +169,12 @@ class Achievement_model extends CI_Model {
 		}
 		return $categoryArray;
 	}
+	public function getAvatarSmallURL(){
+		return base_url()."assets/img/achievements/small/".$this->getAvatar().".jpg";
+	}
+	public function getAvatarLargeURL(){
+		return base_url()."assets/img/achievements/large/".$this->getAvatar().".jpg";
+	}
 	/*
 	***********************************************************************************
 	SECTION: SET_METHODS

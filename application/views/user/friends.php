@@ -15,7 +15,7 @@
 										<strong>Recent Achievements: </strong> rabble, rabble, rabble
 									</div>
 								</div>
-								<div class="scoreSmall" style="float:right;">23</div>
+								<div class="scoreSmall" style="float:right;"><?=$friend->getTotalPoints()?></div>
 							</div>
 					</div>
 				<?php endforeach; ?>

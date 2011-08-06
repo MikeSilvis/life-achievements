@@ -16,6 +16,7 @@ class User_model extends CI_Model {
     public $fb_location_id;
     public $registered;
     public $last_login;
+    public $total_points;
     
 
 	/*
@@ -53,6 +54,7 @@ class User_model extends CI_Model {
 				$tempUser->setRegistered($row->registered);
 				$tempUser->setLastLogin($row->last_login);
 				$tempUser->setPrivileges($row->privileges);
+				$tempUser->setTotalPoints($row->total_points);
 				
 				// Determines array of users or single user
 				if ($array == false)
@@ -113,6 +115,9 @@ class User_model extends CI_Model {
 	}
 	public function getPrivileges(){
 		return $this->privileges;
+	}
+	public function getTotalPoints(){
+		return $this->total_points;
 	}
 	public function getFriendsInDatabase()
 	{
@@ -230,6 +235,9 @@ class User_model extends CI_Model {
 	public function setPrivileges($privileges) // 1 = disabled, 3 = normal, 5 = moderator, 9 = admin
 	{
 		$this->privileges = $privileges;
+	}
+	public function setTotalPoints($totalPoints) {
+		$this->total_points = $totalPoints;
 	}
     public function register_facebook($fb_data) // registers a new user from facebook
     {

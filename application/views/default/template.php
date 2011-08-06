@@ -7,7 +7,6 @@
 <?=$_scripts?>
 <?=$_styles?>
 </head>
-
 <body>
 <div id="wrapper">
 <?
@@ -27,10 +26,10 @@
 			<?
 				if ($this->session->userdata('user_id')) {   		
 					echo anchor('user/profile/'.$this->session->userdata('user_id'), $this->session->userdata('name'));
-					echo " | ". anchor('user/logout','Log out');
+					echo " | ". anchor('authenticate/logout','Log out');
 				}
 				else 
-				    echo '<a href="'.$fb_data["loginUrl"].'&scope=email,user_birthday,user_location">login</a>';			
+				    echo '<a href="authenticate/login"><fb:login-button>login</fb:login-button></a>';			
 			?>			
 		</div>
 	</div>

@@ -58,11 +58,12 @@ h2 {
 	clear: both;
 	width: 98%;
 	padding-top: 1%;
-	padding-bottom: 5%;
+	padding-bottom: 10px;
 	-moz-border-radius: 15px;
 	border-radius: 15px;
 	clear: both;
-	margin-bottom: 10px
+	margin-bottom: 10px;
+	font-size: 1.4em;
 }
 .contentTitle a{
 	color: white;
@@ -73,10 +74,10 @@ h2 {
 }
 .seeMore {
 	text-align: center;
+	font-size:12px;
 }
 .title {
 	padding-left: 10px;
-	font-size: 1.4 em;
 	padding-bottom: 5px;
 }
 
@@ -92,6 +93,7 @@ h2 {
 	padding-top: 15px;
 	padding-bottom: 5px;
 	color: #494949;
+	font-size:12px;
 }
 
 /* Profile */
