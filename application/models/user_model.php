@@ -27,14 +27,30 @@ class User_model extends CI_Model {
 	public function byID($user_id)
 	{
 		$user_id = (int)$user_id;
-		$query = $this->db->get_where('users', array('user_id' => $user_id), 1);
-		return $this->User_model->getNew($query);
+		if ($user_id != NULL){
+			$query = $this->db->get_where('users', array('user_id' => $user_id), 1);
+			return $this->User_model->getNew($query);
+		}
+		else
+		{
+			Errorlog_model::submitError('user','User_model::byID called with no user id',2);
+			redirect('/user/displayUsers');
+			return false;
+		}	
 	}
 	public function byFBID($fb_id)
 	{
 		$fb_id = (int)$fb_id;
-		$query = $this->db->get_where('users', array('fb_id' => $fb_id), 1);
-		return $this->User_model->getNew($query);
+		if ($fb_id != NULL) {
+			$query = $this->db->get_where('users', array('fb_id' => $fb_id), 1);
+			return $this->User_model->getNew($query);
+		}
+		else
+		{
+			Errorlog_model::submitError('user','User_model::byFBID called with no fbID id',2);
+			redirect('/user/displayUsers');
+			return false;
+		}
 	}
 	private function getNew($query, $array = false)
 	{
@@ -65,7 +81,11 @@ class User_model extends CI_Model {
 				return $user;
 		}
 		else
-				return false;
+		{
+			Errorlog_model::submitError('user','build failed to return a valid user.',3);
+			redirect('/user/displayUsers');
+			return false;
+		}
 	}
 	/*
 	***********************************************************************************
@@ -126,6 +146,12 @@ class User_model extends CI_Model {
 		$this->db->join('users', 'friends.friend_id = users.user_id');
 		$query =  $this->db->get();
 		return $this->getNew($query,true);
+	}
+	public function getTotalFriends()
+	{
+		$this->db->select('friends_id');
+		$this->db->from('friends')->where('friends.user_id',$this->getID());
+		return $this->db->count_all_results();
 	}
 	public function getRegisteredFriends(){ // used to either update or retrieve current friends
 			$friend = NULL; // Must predefine it incase the loop isn't called

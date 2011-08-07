@@ -51,7 +51,7 @@ class Achievement extends CI_Controller {
 			'achievementArray' => Achievement_model::getAllAchievements(),
 		);
 		$achievementArray = Achievement_model::getAllAchievements();
-		
+				
         $this->template->write('title', "List of Life Achievements");
 		$this->template->write_view('content', 'achievement/main/display',$data);	
 		$this->template->render(); 

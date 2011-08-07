@@ -11,23 +11,33 @@ class User extends CI_Controller {
 	}
 	function profile($user_id)
 	{	        		
-		if ($user_id != NULL)
-			$this->data['user'] = User_model::byID($user_id);			
-		if (!is_object($this->data['user']))
-			redirect('/user/displayUsers'); // redirect to their profile.
+		$this->data['user'] = User_model::byID($user_id);			
 		
 		// Builds all of the information to be used else where
-		$userAch = Userach_model::byUserID($user_id); // finds all user specific achievements
-		$arrayID = Userach_model::getArrayofID($userAch); //  builds an array of the achievement ids to search through achievements	
-		$this->data['achievementArray'] = Achievement_model::userAchievements($arrayID); // now finds the given achievements	
-		
+		$this->data['achievementArray'] = Userach_model::byUserID($user_id); // finds all user specific achievements	
 		$this->data['friendsArray'] = $this->data['user']->getFriendsInDatabase(); // get friends
-			
+					
 		$this->template->write('title', "{$this->data['user']->getName()}'s Achievements");
-		$this->template->write_view('holder', 'user/userInfo',$this->data);	
-		$this->template->write_view('holder', 'user/achievements',$this->data);	
-		$this->template->write_view('holder', 'user/comments',$this->data);	
-		$this->template->write_view('holder', 'user/friends',$this->data);	
+		
+		// userInfo widget
+		$commentsArray = array(
+								'widgetTitle' => $this->data['user']->getName(), 
+								'view' => 'user/userInfo','content'=>$this->data,'classHolder'=>'userInfoHeader'
+							  );
+		$this->template->write_view('holder', 'default/widget',$commentsArray);	
+		// achievement widget
+		$achievementArray = array(
+									'widgetTitle' => 'Recent Achievements', 'view' => 'user/achievements',
+									'content'=>$this->data,'classHolder'=>'achievements'
+								);
+		$this->template->write_view('holder', 'default/widget',$achievementArray);			
+		// comments widget
+		$commentsArray = array('widgetTitle' => 'Comments', 'view' => 'user/comments','content'=>'','classHolder'=>'comments');
+		$this->template->write_view('holder', 'default/widget',$commentsArray);	
+		// friends widget
+		$friendsArray = array('widgetTitle' => 'Friends', 'view' => 'user/friends','content'=>$this->data,'classHolder'=>'friends');
+		$this->template->write_view('holder', 'default/widget',$friendsArray);	
+		
 		$this->template->render();
 	}
  	function displayUsers() 

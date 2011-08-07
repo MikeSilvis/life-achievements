@@ -68,6 +68,20 @@ $template['default']['regions'] = array(
 $template['default']['parser'] = 'parser';
 $template['default']['parser_method'] = 'parse';
 $template['default']['parse_template'] = FALSE;
+/*
+|--------------------------------------------------------------------------
+| Fancybox Template Configuration (adjust this or create your own)
+|--------------------------------------------------------------------------
+*/
+$template['fancybox']['template'] = 'default/fancybox';
+$template['fancybox']['regions'] = array(
+	'title',
+    'content',
+);
+$template['fancybox']['parser'] = 'parser';
+$template['fancybox']['parser_method'] = 'parse';
+$template['fancybox']['parse_template'] = FALSE;
+
 
 /* End of file template.php */
 /* Location: ./system/application/config/template.php */

@@ -90,7 +90,10 @@
 	float: right;
 	width: 300px
 }
-
+#userInfoHeader {
+	width:900px; 
+	margin:0 auto;
+}
 #avatarPics {
 	float: left;
 	width: 100px;

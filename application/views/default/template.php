@@ -1,11 +1,24 @@
+<!DOCTYPE html>
 <html>
 <head>
 <title><?=$title;?></title>
+<!-- My Style Sheets -->
 <link rel="stylesheet" href='<?=base_url()?>assets/css/layout.css' type="text/css" media="screen, projection" /> 
-<link rel="stylesheet" href='<?=base_url()?>assets/css/style.css' type="text/css" media="screen, projection" /> 
+<link rel="stylesheet" href='<?=base_url()?>assets/css/style.css' type="text/css" media="screen, projection" />
+<!-- jquery -->
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js"></script>
+<!-- fancybox -->
+<script type="text/javascript" src="<?=base_url()?>assets/js/plugins/fancybox/jquery.fancybox-1.3.4.pack.js"></script>
+<link rel="stylesheet" type="text/css" href="<?=base_url()?>assets/js/plugins/fancybox/jquery.fancybox-1.3.4.css" media="screen" />
+
 <meta property="fb:app_id" content="229353873772038">
 <?=$_scripts?>
 <?=$_styles?>
+<script type="text/javascript">
+	$(document).ready(function() {
+			$(".ajax").fancybox();
+	});
+</script>
 </head>
 <body>
 <div id="wrapper">
@@ -28,8 +41,8 @@
 					echo anchor('user/profile/'.$this->session->userdata('user_id'), $this->session->userdata('name'));
 					echo " | ". anchor('authenticate/logout','Log out');
 				}
-				else 
-				    echo '<a href="authenticate/login"><fb:login-button>login</fb:login-button></a>';			
+				else 	
+				    echo anchor('/authenticate/login','<fb:login-button>login</fb:login-button>');
 			?>			
 		</div>
 	</div>

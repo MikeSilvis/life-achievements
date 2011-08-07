@@ -10,7 +10,7 @@ class Achievement_model extends CI_Model {
     public $name;
     public $description;
   	public $badge_picture;
-  	public $categoryName;
+  	public $category;
   	public $category_id;
   	public $point;
 
@@ -33,12 +33,6 @@ class Achievement_model extends CI_Model {
 		$this->db->where('achievement_id', $achievementID);
 		$query = $this->db->get();
 		return Achievement_model::getNew($query);
-	}
-	public function userAchievements($achievementArrayID){
-		$this->Achievement_model->Select();
-		$this->db->where_in('achievement_id', $achievementArrayID);
-		$query = $this->db->get();
-		return Achievement_model::getNew($query,true);		
 	}
 	private function getNew($query, $array = false)
 	{
