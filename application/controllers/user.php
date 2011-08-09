@@ -40,16 +40,5 @@ class User extends CI_Controller {
 		
 		$this->template->render();
 	}
- 	function displayUsers() 
- 	{       
-        $data = array(
-          	'userArray' => User_model::getUsers(),
-			'fb_data' => $this->fb_data,
-		);
-		$this->template->write('title', 'Active Users');
-		$this->template->write_view('content', 'user/main/user_list',$data);		
-		$this->template->render();
-    }
-
 }
 ?>

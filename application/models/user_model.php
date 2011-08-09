@@ -223,6 +223,18 @@ class User_model extends CI_Model {
 		$this->db->where('user_id', $this->getID());
 		$this->db->update('users');	    
 	}
+	public function updatePoints()
+	{
+		$this->db->select_sum('point');
+		$this->db->from('users')->join('achievements_users', 'achievements_users.user_id = users.user_id');
+		$this->db->join('achievements','achievements_users.achievement_id = achievements.achievement_id');
+		$this->db->where('users.user_id', $this->getID());
+		$query = $this->db->get();
+		$result = $query->result();
+
+		$this->setTotalPoints($result[0]->point);
+		$this->update();
+	}
 	/*
 	***********************************************************************************
 	SECTION: SET_METHODS

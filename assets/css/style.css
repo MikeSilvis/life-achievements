@@ -8,25 +8,30 @@ body {
 /*background-image: url(../img/bg.png);
 	background-repeat: no-repeat*/
 }
-
+p a{
+	text-decoration: none;
+	color:#5e8bd4;
+}
+p a:hover{
+	text-decoration: underline;
+}
 h1 {
-	color: #444;
-	border-bottom: 1px solid #D0D0D0;
+	color: #54b40b;
 	font-size: 16px;
 	font-weight: 700;
-	margin: 24px 0 2px;
+	margin: 10px 0 2px;
 	padding: 5px 0 6px
 }
-
 h2 {
-	color: #444;
-	border-bottom: 1px solid #D0D0D0;
+	color: #54b40b;
 	font-size: 14px;
 	font-weight: 700;
 	margin: 24px 0 2px;
 	padding: 5px 0 6px
 }
-
+h2 a{
+	color:#5e8bd4 !important;
+}
 .clear {
 	clear: both
 }
@@ -95,7 +100,9 @@ h2 {
 	color: #494949;
 	font-size:12px;
 }
-
+.contentHolder a{
+	color:#5e8bd4;
+}
 /* Profile */
 .avatar {
 	border: #83d3d8;
@@ -121,4 +128,16 @@ h2 {
 	text-align: center;
 	color: white;
 	padding-top: 8px;
+}
+#error {
+	font-size:14px;
+	text-align:center;
+	color:red;
+	padding:10px;
+}
+#success {
+	font-size:14px;
+	text-align:center;
+	color:green;
+	padding:10px;
 }

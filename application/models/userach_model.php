@@ -12,6 +12,7 @@ class Userach_model extends Achievement_model {
     public $user_description;
     public $user_picture;
     public $date_completed;
+    public $location;
     
     /*
 	***********************************************************************************
@@ -24,7 +25,7 @@ class Userach_model extends Achievement_model {
 		 					achievements_users.date_completed,achievements_users.description AS user_description, 
 		 					achievements.name AS name, achievements.description AS ach_description, achievements.description, 
 		 					achievements.badge_picture, achievements.point, achievements.category_id, 
-		 					achievement_categories.name as category, userAch_id '
+		 					achievement_categories.name as category, userAch_id, achievements_users.location '
 		 					);
 	}
 	public function from()
@@ -41,7 +42,6 @@ class Userach_model extends Achievement_model {
 	    $this->db->where('users.user_id', $user_id);
 	    $this->db->limit($limit, $offset); 
 	    $query = $this->db->get();
-	    
 	    return $this->Userach_model->getNew($query,true);		
 	}
 	public function byAchievement($userAchID)
@@ -67,6 +67,7 @@ class Userach_model extends Achievement_model {
 				$tempUserach->setUserAvatar($row->picture);
 				$tempUserach->setUserDescription($row->user_description);
 				$tempUserach->setDateCompleted($row->date_completed);
+				$tempUserach->setLocation($row->location);
 				
 				// set achievement specific things
 				$tempUserach->setName($row->name);
@@ -87,7 +88,54 @@ class Userach_model extends Achievement_model {
 		else
 				return false;
 	}
-    
+	public function userAchievementParams(){ // used to prep the achievement table for modification
+	    return  array(
+	    				'user_id' => $this->session->userdata('user_id'),
+	    				'achievement_id' => $this->getAchievementID(),
+	    				'location' => $this->getLocation(),
+	    				'date_completed' => $this->getDate(),
+	    				'description'=>$this->getUserDescription(), 
+	    				'picture'=> $this->getUserAvatar(),
+	    				);
+	}
+	// update the user achievement 
+	public function update($params = array()) { 
+		if ($params['achievement'])
+			$this->setAchievementID($params['achievement']);
+		if ($params['description'])
+			$this->setUserDescription($params['description']);
+		if ($params['badgePic'])
+			$this->setUserAvatar($params['badgePic']);	
+		if ($params['date_completed'])
+			$this->setDateCompleted($params['date_completed']);
+		if ($params['location'])
+			$this->setLocation($params['location']);
+		
+		$updateParams = $this->userAchievementParams();
+	    $this->db->update('achievements_users', $updateParams, "userAch_id = ".$this->getID());
+	    
+		$user = User_model::byID($this->session->userdata('user_id'));
+		$user->updatePoints();	    
+	}
+	// insert a new user achievement
+	public function insert($params = array()) {
+		if ($params['achievement'])
+			$this->setAchievementID($params['achievement']);
+		if ($params['description'])
+			$this->setUserDescription($params['description']);
+		if ($params['badgePic'])
+			$this->setUserAvatar($params['badgePic']);	
+		if ($params['date_completed'])
+			$this->setDateCompleted($params['date_completed']);
+		if ($params['location'])
+			$this->setLocation($params['location']);
+		
+		$updateParams = $this->userAchievementParams();
+		$this->db->insert('achievements_users', $updateParams);
+		
+		$user = User_model::byID($this->session->userdata('user_id'));
+		$user->updatePoints();
+	}
     /*
 	***********************************************************************************
 	SECTION: GET_FUNCTIONS
@@ -111,22 +159,14 @@ class Userach_model extends Achievement_model {
 	public function getDate(){
 	   return $this->date_completed;
 	}
-	/*
-	public function getAchivements($user_id)
-	{
-	    $this->db->select('users.user_id AS user_id, achievements.achievement_id AS achievement_id, achievements_users.picture, achievements_users.date_completed, achievements_users.description ')->from('achievements_users');
-	    $this->db->join('achievements', 'achievements.achievement_id = achievements_users.achievement_id');
-	    $this->db->join('users', 'achievements_users.user_id = users.user_id');
-	    $this->db->where('users.user_id', $user_id);
-	    $query = $this->db->get();
-	    
-	    return $this->getNew($query,true);
-	}*/
+	public function getLocation(){
+		return $this->location;
+	}
 	public function getTotalAchievements($userID){
 		$this->db->select('achievement_id');
 		$this->db->from('achievements_users')->where('user_id',$userID);
 		return $this->db->count_all_results();
-	}	
+	}
     /*
 	***********************************************************************************
 	SECTION: SET_FUNCTIONS
@@ -149,6 +189,21 @@ class Userach_model extends Achievement_model {
 	}
 	function setDateCompleted($date) {
 		$this->date_completed = $date;
+	}
+	function setLocation($location){
+		$this->location = $location;
+	}
+    /*
+	***********************************************************************************
+	SECTION: COMPUTE_FUNCTIONS
+	***********************************************************************************
+	*/
+	function canEdit()
+	{
+		if (($this->getUserID() == $this->session->userdata('user_id')) || ($this->session->userdata('privileges') > 5))
+			return true;
+		else
+			return false;
 	}
 }
 ?>

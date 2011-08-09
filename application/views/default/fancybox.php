@@ -4,6 +4,8 @@
 </head>
 <body>
 	<h1><?=$title?></h1>
-	<p><?=$content?></p>
+	<div id="fancyBox">
+		<?=$content?>
+	</div>
 </body>
 </html>

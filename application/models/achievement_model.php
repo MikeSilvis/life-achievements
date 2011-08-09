@@ -29,10 +29,19 @@ class Achievement_model extends CI_Model {
 	public function byID($achievementID)
 	{
 		$achievementID = (int)$achievementID;
-		$this->Achievement_model->Select();
-		$this->db->where('achievement_id', $achievementID);
-		$query = $this->db->get();
-		return Achievement_model::getNew($query);
+		
+		if ($achievementID != NULL) {	
+			$this->Achievement_model->Select();
+			$this->db->where('achievement_id', $achievementID);
+			$query = $this->db->get();
+			return Achievement_model::getNew($query);
+		}
+		else {
+			Errorlog_model::submitError('achievement','Achievement_model::byID called with no achievement id',2);
+			redirect('/achievement/display');
+			return false;
+		}
+
 	}
 	private function getNew($query, $array = false)
 	{
@@ -58,8 +67,11 @@ class Achievement_model extends CI_Model {
 			}
 				return $achievement;
 		}
-		else
-				return false;
+		else {
+			Errorlog_model::submitError('achievement','Achievement failed to return a valid achievement',2);
+			redirect('/achievement/display');
+			return false;
+		}
 	}
 	/*
 	***********************************************************************************
@@ -75,13 +87,11 @@ class Achievement_model extends CI_Model {
 	    				'point'=>$this->getPoint(),
 	    				);
 	}
-	public function update($params = array()) { // updates the achievement object if a post value has been set and then updates the database
+	public function update($params = array()) { 
 		if ($params['name'])
 			$this->setName($params['name']);
 		if ($params['description'])
 			$this->setDescription($params['description']);
-		if ($params['badgePic'])
-			$this->setAvatar($params['badgePic']);
 		if ($params['category'])
 			$this->setCategoryID($params['category']);
 		if ($params['point'])
@@ -95,8 +105,6 @@ class Achievement_model extends CI_Model {
 			$this->setName($params['name']);
 		if ($params['description'])
 			$this->setDescription($params['description']);
-		if ($params['badgePic'])
-			$this->setAvatar($params['badgePic']);
 		if ($params['category'])
 			$this->setCategoryID($params['category']);
 		if ($params['point'])
@@ -163,11 +171,22 @@ class Achievement_model extends CI_Model {
 		}
 		return $categoryArray;
 	}
+	public function getListofAchievements(){
+		$this->Achievement_model->Select();
+		$this->db->order_by("name", "ASC"); 
+		$query = $this->db->get();
+	    foreach($query->result() as $row)
+		{
+			$achievementArray[$row->achievement_id] = $row->name;
+			
+		}
+		return $achievementArray;
+	}
 	public function getAvatarSmallURL(){
-		return base_url()."assets/img/achievements/small/".$this->getAvatar().".jpg";
+		return base_url()."assets/img/achievements/thumb/".$this->getID()."_thumb.jpg";
 	}
 	public function getAvatarLargeURL(){
-		return base_url()."assets/img/achievements/large/".$this->getAvatar().".jpg";
+		return base_url()."assets/img/achievements/large/".$this->getID().".jpg";
 	}
 	/*
 	***********************************************************************************
@@ -194,6 +213,33 @@ class Achievement_model extends CI_Model {
 	}
 	function setPoint($point){
 	    $this->point = $point;
+	}
+
+	function uploadAvatar()
+	{
+		$config['upload_path'] 		= 	'./assets/img/achievements/';
+		$config['allowed_types']	= 	'gif|jpg|png|jpeg';
+		$config['max_size']			= 	'5120';
+		$config['max_width']  		= 	'1000';
+		$config['max_height']  		= 	'1000';
+
+		$this->upload->initialize($config);
+
+		if ($this->upload->do_upload())
+		{
+			$imgData = $this->upload->data();
+			$config['image_library'] = 'gd2';
+			$config['create_thumb'] = TRUE;
+			$config['source_image'] = $imgData['full_path'];
+			$config['new_image'] = './assets/img/achievements/thumb/'.$this->getID().'.jpg';
+			$config['maintain_ratio'] = TRUE;
+			$config['width'] = 100;
+			$config['height'] = 100;
+			
+			$this->load->library('image_lib', $config);
+			
+			$this->image_lib->resize();
+		}
 	}
 }
 ?>

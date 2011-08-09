@@ -90,10 +90,12 @@
 	float: right;
 	width: 300px
 }
+
 #userInfoHeader {
-	width:900px; 
-	margin:0 auto;
+	width: 900px;
+	margin: 0 auto
 }
+
 #avatarPics {
 	float: left;
 	width: 100px;
@@ -103,7 +105,7 @@
 .userBio {
 	float: left;
 	width: 200px;
-	padding-top: 10px;
+	padding-top: 10px
 }
 
 /* Friends Holder */
@@ -112,7 +114,7 @@
 	width: 100%;
 	clear: both;
 	height: 50px;
-	margin-bottom: 10px;
+	margin-bottom: 10px
 }
 
 .friendContent {
@@ -120,10 +122,34 @@
 	padding-left: 10px;
 	width: 220px
 }
+
 .friendText {
-	float:left;
-	width: 170px;
+	float: left;
+	width: 170px
 }
-.friendText a{
-	color:black !important;
+
+.friendText a {
+	color: #5e8bd4!important
+}
+
+#fancyBox {
+	float: left;
+	width: 500px
+}
+
+#fancyIMG {
+	float: left;
+	width: 200px;
+	height:120px;
+}
+
+#fancyInfo {
+	float: right;
+	width: 300px;
+	height:120px;
+}
+
+#fancyDescrip {
+	float: left;
+	width: 500px
 }
