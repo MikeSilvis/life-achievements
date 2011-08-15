@@ -26,6 +26,6 @@ class Authenticate extends CI_Controller {
 	{
 		$this->session->unset_userdata($this);
 	    $this->session->sess_destroy();
-	    redirect('/achievement/display');
+	    redirect('/user/profile/41');
 	}
 }

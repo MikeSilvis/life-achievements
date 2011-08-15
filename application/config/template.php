@@ -52,7 +52,7 @@ $template['active_template'] = 'default';
 
 /*
 |--------------------------------------------------------------------------
-| Default Template Configuration (adjust this or create your own)
+| Default Template Configuration 
 |--------------------------------------------------------------------------
 */
 
@@ -70,7 +70,7 @@ $template['default']['parser_method'] = 'parse';
 $template['default']['parse_template'] = FALSE;
 /*
 |--------------------------------------------------------------------------
-| Fancybox Template Configuration (adjust this or create your own)
+| Fancybox Template Configuration 
 |--------------------------------------------------------------------------
 */
 $template['fancybox']['template'] = 'default/fancybox';
@@ -82,6 +82,19 @@ $template['fancybox']['parser'] = 'parser';
 $template['fancybox']['parser_method'] = 'parse';
 $template['fancybox']['parse_template'] = FALSE;
 
+/*
+|--------------------------------------------------------------------------
+| Blank Template Used Primarily for AJAX
+|--------------------------------------------------------------------------
+*/
+$template['blank']['template'] = 'default/blank';
+$template['blank']['regions'] = array(
+    'content',
+);
+
+$template['blank']['parser'] = 'parser';
+$template['blank']['parser_method'] = 'parse';
+$template['blank']['parse_template'] = FALSE;
 
 /* End of file template.php */
 /* Location: ./system/application/config/template.php */

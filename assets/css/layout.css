@@ -104,7 +104,7 @@
 
 .userBio {
 	float: left;
-	width: 200px;
+	width: 220px;
 	padding-top: 10px
 }
 
@@ -151,5 +151,10 @@
 
 #fancyDescrip {
 	float: left;
-	width: 500px
+	width: 350px
+}
+#fancyAvatar {
+	float:right; 
+	padding-top:20px;
+	width:100px;
 }

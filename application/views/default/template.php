@@ -7,43 +7,48 @@
 <link rel="stylesheet" href='<?=base_url()?>assets/css/style.css' type="text/css" media="screen, projection" />
 <!-- jquery -->
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js"></script>
+<!-- jQuery UI -->
+<script type="text/javascript" src="<?=base_url()?>assets/jquery.ui/js/jquery-ui-1.8.15.custom.min.js"></script>
+<link type="text/css" href="<?=base_url()?>assets/jquery.ui/css/start/jquery-ui-1.8.15.custom.css" rel="stylesheet" />
 <!-- fancybox -->
 <script type="text/javascript" src="<?=base_url()?>assets/js/plugins/fancybox/jquery.fancybox-1.3.4.pack.js"></script>
 <link rel="stylesheet" type="text/css" href="<?=base_url()?>assets/js/plugins/fancybox/jquery.fancybox-1.3.4.css" media="screen" />
 <!-- form Validation -->
 <script type="text/javascript" src="<?=base_url()?>assets/form/js/uni-form-validation.jquery.js" charset="utf-8"></script>
 <link href="<?=base_url()?>assets/form/css/uni-form.css" media="screen" rel="stylesheet"/>
-<link href="<?=base_url()?>assets/form/css/default.uni-form.css" title="Default Style" media="screen" rel="stylesheet"/>
-<!-- jQuery Calendar -->
-<style type="text/css">@import "<?=base_url()?>assets/form/datepicker/css/jquery.datepick.css";</style> 
-<script type="text/javascript" src="<?=base_url()?>assets/form/datepicker/jquery.datepick.min.js"></script>
-
+<link href="<?=base_url()?>assets/form/css/default.uni-form.css" title="Default Style" media="screen" rel="stylesheet"/>	
+<!-- Facebook API -->
 <meta property="fb:app_id" content="229353873772038">
 <?=$_scripts?>
 <?=$_styles?>
 <script type="text/javascript">
 	$(document).ready(function() {
 			$(".ajax").fancybox();
-			$("#date_completed").datepick();
+			$( "#datepicker" ).datepicker();
 	});
 	$("#addAchievement").bind("submit", function() {
-	$.fancybox.showActivity();
-
-	$.ajax({
-		type	: "POST",
-		cache	: false,
-		url		: "life/manage/add.php",
-		data	: $(this).serializeArray(),
-		success: function(data) {
-			$.fancybox(data);
-		}
+		$.fancybox.showActivity();
+	
+		$.ajax({
+			type	: "POST",
+			cache	: false,
+			url		: "life/manage/add.php",
+			data	: $(this).serializeArray(),
+			success: function(data) {
+				$.fancybox(data);
+			}
+		});
+	
+		return false;
 	});
-
-	return false;
-});
+	$(function(){
+		$('form.uniForm').uniform();
+		$( "#datepicker" ).datepicker();
+	});	
 </script>
 </head>
 <body>
+<? /* <img class="bg" alt="" src="<?=base_url()?>assets/img/site/bg.jpg"> */ ?>
 <div id="wrapper">
 	<div id="header">
 		<div id="logo"></div>

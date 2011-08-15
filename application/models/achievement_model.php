@@ -171,22 +171,29 @@ class Achievement_model extends CI_Model {
 		}
 		return $categoryArray;
 	}
-	public function getListofAchievements(){
+	public function getListofAchievements($category = NULL){
 		$this->Achievement_model->Select();
 		$this->db->order_by("name", "ASC"); 
-		$query = $this->db->get();
-	    foreach($query->result() as $row)
-		{
-			$achievementArray[$row->achievement_id] = $row->name;
+		
+		if ($category != NULL) // Select only achievements in a specific category
+			$this->db->where('achievements.category_id', $category);
 			
+		$query = $this->db->get();
+		if ($query->num_rows() > 0)
+		{
+		    foreach($query->result() as $row)
+			{
+				$achievementArray[$row->achievement_id] = $row->name;
+				
+			}
+			return $achievementArray;
 		}
-		return $achievementArray;
+		else 
+			Errorlog_model::submitError('achievement','Achievement_model::getListofAchievements() called but no results found. Category_id = '.$category,2);
+			redirect('/achievement/display');
 	}
-	public function getAvatarSmallURL(){
-		return base_url()."assets/img/achievements/thumb/".$this->getID()."_thumb.jpg";
-	}
-	public function getAvatarLargeURL(){
-		return base_url()."assets/img/achievements/large/".$this->getID().".jpg";
+	public function getAvatarIMG($size,$style = NULL, $alt = NULL){
+		return "<img src='/life/assets/img/achievements/{$size}/{$this->getID()}_{$size}.jpg' style='{$style}' alt='{$alt}'>";
 	}
 	/*
 	***********************************************************************************
@@ -227,18 +234,28 @@ class Achievement_model extends CI_Model {
 
 		if ($this->upload->do_upload())
 		{
+			$this->load->library('image_lib');
+			// upload thumbnail
 			$imgData = $this->upload->data();
 			$config['image_library'] = 'gd2';
 			$config['create_thumb'] = TRUE;
 			$config['source_image'] = $imgData['full_path'];
 			$config['new_image'] = './assets/img/achievements/thumb/'.$this->getID().'.jpg';
-			$config['maintain_ratio'] = TRUE;
 			$config['width'] = 100;
-			$config['height'] = 100;
-			
-			$this->load->library('image_lib', $config);
-			
+			$config['height'] = 100;			
+			$this->image_lib->initialize($config);
 			$this->image_lib->resize();
+			
+			// upload larger image
+			$config['new_image'] = './assets/img/achievements/large/'.$this->getID().'.jpg';
+			$config['width'] = 500;
+			$config['height'] = 500;
+			$config['thumb_marker']= "";
+			$this->image_lib->initialize($config);
+			$this->image_lib->resize();
+			
+			// delete original
+			unlink($config['source_image']);
 		}
 	}
 }

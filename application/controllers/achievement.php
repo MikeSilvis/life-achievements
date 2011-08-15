@@ -1,9 +1,9 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 class Achievement extends CI_Controller {
-    function __construct()
-    {
-		parent::__construct();
+
+    function __construct() {
+    	parent::__construct();
         $this->fb_data = $this->session->userdata('fb_data'); // This array contains all the user FB information
         $this->user_id = $this->session->userdata('user_id'); // This array contains the user ID information
         $this->privileges = $this->session->userdata('privileges'); // This array contains the user ID information

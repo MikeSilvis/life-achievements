@@ -9,6 +9,7 @@ class Userach_model extends Achievement_model {
     public $userAch_id;
     public $achievement_id;
     public $user_id;
+    public $user_name;
     public $user_description;
     public $user_picture;
     public $date_completed;
@@ -25,7 +26,7 @@ class Userach_model extends Achievement_model {
 		 					achievements_users.date_completed,achievements_users.description AS user_description, 
 		 					achievements.name AS name, achievements.description AS ach_description, achievements.description, 
 		 					achievements.badge_picture, achievements.point, achievements.category_id, 
-		 					achievement_categories.name as category, userAch_id, achievements_users.location '
+		 					achievement_categories.name as category, userAch_id, achievements_users.location, achievements_users.name as user_name '
 		 					);
 	}
 	public function from()
@@ -61,10 +62,10 @@ class Userach_model extends Achievement_model {
 			foreach($query->result() as $row)
 			{
 				$tempUserach = new Userach_model();
-				$tempUserach->setID($row->userAch_id);
+				$tempUserach->setUserAchID($row->userAch_id);
 				$tempUserach->setAchievementID($row->achievement_id);
 				$tempUserach->setUserID($row->user_id);
-				$tempUserach->setUserAvatar($row->picture);
+				$tempUserach->setUserName($row->user_name);
 				$tempUserach->setUserDescription($row->user_description);
 				$tempUserach->setDateCompleted($row->date_completed);
 				$tempUserach->setLocation($row->location);
@@ -72,7 +73,6 @@ class Userach_model extends Achievement_model {
 				// set achievement specific things
 				$tempUserach->setName($row->name);
 				$tempUserach->setDescription($row->ach_description);
-				$tempUserach->setAvatar($row->badge_picture);
 				$tempUserach->setPoint($row->point);
 				$tempUserach->setCategoryID($row->category_id);
 				$tempUserach->setCategory($row->category);
@@ -92,27 +92,27 @@ class Userach_model extends Achievement_model {
 	    return  array(
 	    				'user_id' => $this->session->userdata('user_id'),
 	    				'achievement_id' => $this->getAchievementID(),
+	    				'name' => $this->getUserName(),
 	    				'location' => $this->getLocation(),
 	    				'date_completed' => $this->getDate(),
 	    				'description'=>$this->getUserDescription(), 
-	    				'picture'=> $this->getUserAvatar(),
 	    				);
 	}
 	// update the user achievement 
 	public function update($params = array()) { 
 		if ($params['achievement'])
 			$this->setAchievementID($params['achievement']);
+		if ($params['name'])
+			$this->setUserName($params['name']);		
 		if ($params['description'])
 			$this->setUserDescription($params['description']);
-		if ($params['badgePic'])
-			$this->setUserAvatar($params['badgePic']);	
 		if ($params['date_completed'])
 			$this->setDateCompleted($params['date_completed']);
 		if ($params['location'])
 			$this->setLocation($params['location']);
 		
 		$updateParams = $this->userAchievementParams();
-	    $this->db->update('achievements_users', $updateParams, "userAch_id = ".$this->getID());
+	    $this->db->update('achievements_users', $updateParams, "userAch_id = ".$this->getUserAchID());
 	    
 		$user = User_model::byID($this->session->userdata('user_id'));
 		$user->updatePoints();	    
@@ -121,10 +121,10 @@ class Userach_model extends Achievement_model {
 	public function insert($params = array()) {
 		if ($params['achievement'])
 			$this->setAchievementID($params['achievement']);
+		if ($params['name'])
+			$this->setUserName($params['name']);				
 		if ($params['description'])
 			$this->setUserDescription($params['description']);
-		if ($params['badgePic'])
-			$this->setUserAvatar($params['badgePic']);	
 		if ($params['date_completed'])
 			$this->setDateCompleted($params['date_completed']);
 		if ($params['location'])
@@ -141,7 +141,7 @@ class Userach_model extends Achievement_model {
 	SECTION: GET_FUNCTIONS
 	***********************************************************************************
 	*/
-	public function getID(){
+	public function getUserAchID(){
 		return $this->userAch_id;
 	}
 	public function getAchievementID(){
@@ -150,11 +150,11 @@ class Userach_model extends Achievement_model {
 	public function getUserID(){
 	   return $this->user_id;
 	}
+	public function getUserName(){
+		return $this->user_name;
+	}
 	public function getUserDescription(){
 	   return $this->user_description;
-	}
-	public function getUserAvatar(){
-	   return $this->user_picture;
 	}
 	public function getDate(){
 	   return $this->date_completed;
@@ -167,12 +167,15 @@ class Userach_model extends Achievement_model {
 		$this->db->from('achievements_users')->where('user_id',$userID);
 		return $this->db->count_all_results();
 	}
+	public function getUserAvatarIMG($size,$style = NULL, $alt = NULL){
+		return "<img src='/life/assets/img/userAch/{$size}/{$this->getUserAchID()}.jpg' style='{$style}' alt='{$alt}'>";
+	}
     /*
 	***********************************************************************************
 	SECTION: SET_FUNCTIONS
 	***********************************************************************************
 	*/
-	function setID($userAchID){
+	function setUserAchID($userAchID){
 		$this->userAch_id = $userAchID;
 	}
 	function setAchievementID($id) {
@@ -181,11 +184,11 @@ class Userach_model extends Achievement_model {
 	function setUserID($user_id){
 		$this->user_id = $user_id;
 	}
+	function setUserName($userName){
+		$this->user_name = $userName;
+	}
 	function setUserDescription($description) {
 		$this->user_description = $description;
-	}
-	function setUserAvatar($avatar){
-		$this->user_picture = $avatar;
 	}
 	function setDateCompleted($date) {
 		$this->date_completed = $date;
@@ -205,5 +208,42 @@ class Userach_model extends Achievement_model {
 		else
 			return false;
 	}
+	function uploadUserAvatar()
+	{
+		$config['upload_path'] 		= 	'./assets/img/achievements/';
+		$config['allowed_types']	= 	'gif|jpg|png|jpeg';
+		$config['max_size']			= 	'5120';
+		$config['max_width']  		= 	'1000';
+		$config['max_height']  		= 	'1000';
+
+		$this->upload->initialize($config);
+
+		if ($this->upload->do_upload())
+		{
+			$this->load->library('image_lib');
+			// upload thumbnail
+			$imgData = $this->upload->data();
+			$config['image_library'] = 'gd2';
+			$config['create_thumb'] = TRUE;
+			$config['thumb_marker']= "";			
+			$config['source_image'] = $imgData['full_path'];
+			$config['new_image'] = './assets/img/userAch/thumb/'.$this->getUserAchID().'.jpg';
+			$config['width'] = 100;
+			$config['height'] = 100;			
+			$this->image_lib->initialize($config);
+			$this->image_lib->resize();
+			
+			// upload larger image
+			$config['new_image'] = './assets/img/userAch/large/'.$this->getUserAchID().'.jpg';
+			$config['width'] = 500;
+			$config['height'] = 500;
+			$config['maintain_ratio'] = TRUE;
+			$this->image_lib->initialize($config);
+			$this->image_lib->resize();
+			
+			// delete original
+			unlink($config['source_image']);
+		}
+	}	
 }
 ?>

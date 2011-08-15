@@ -24,6 +24,11 @@ $config = array(
 						                     'rules'   => 'required|min_length[4]|max_length[50]'
 						                  ),
 						               array(
+						                     'field'   => 'name',
+						                     'label'   => 'name',
+						                     'rules'   => 'required|min_length[4]|max_length[250]'
+						                  ),						                  
+						               array(
 						                     'field'   => 'date_completed',
 						                     'label'   => 'date_completed',
 						                     'rules'   => 'required|min_length[9]|max_length[10]'

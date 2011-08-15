@@ -29,7 +29,8 @@
    
    ------------------------------------------------------------------------------ */
 .uniForm {
-font-size: 14px;
+	font-size: 14px;
+	font-family: Lucida Grande, Verdana, Sans-serif;
 }
 
 .uniForm legend {
@@ -42,6 +43,7 @@ font-size: 14px;
 	float:left;
 	width:250px;
 	height:20px;
+	font-size: 16px;
 }
 .uniForm .ctrlHolder {
 	padding: 5px;
@@ -86,7 +88,7 @@ font-size: 14px;
 	-webkit-box-shadow: 1px 1px 0 #fff;
 	-moz-box-shadow: 1px 1px 0 #fff;
 	text-shadow: -1px -1px 0 rgba(0,0,0,.25);
-	margin: 0 auto
+	margin: 0 auto;
 }
 
 .uniForm .buttonHolder .primaryAction:active {
@@ -116,21 +118,31 @@ font-size: 14px;
 	color: #777
 }
 
-.uniForm .textInput,.uniForm textarea {
+.uniForm .textInput {
 	padding: 4px 2px;
-	width:300px;
+	width:450px;
 	border: 1px solid #aaa;
-	background: #fff
+	background: #fff;
+	font-size: 16px;
 }
 
 .uniForm textarea {
-	height: 12em
+	height: 12em;
+	padding: 4px 2px;
+	width:450px;
+	border: 1px solid #aaa;
+	font-size: 16px;
 }
 
 .uniForm select {
+	padding:5px 2px;
+	width:450px;
+	border:1px solid #aaa;
+	font-size: 16px;
 }
 
 .uniForm .fileUpload {
+	
 }
 
 .uniForm ul {

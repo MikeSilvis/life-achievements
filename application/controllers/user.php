@@ -8,6 +8,8 @@ class User extends CI_Controller {
         $this->fb_data = $this->session->userdata('fb_data'); // This array contains all the user FB information
         $this->user_id = $this->session->userdata('user_id'); // This array contains all the user FB information
         $this->data['fb_data'] = $this->fb_data;
+        
+        //die(print_r($this->data['fb_data']));
 	}
 	function profile($user_id)
 	{	        		

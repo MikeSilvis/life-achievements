@@ -10,7 +10,7 @@
 						<div style="font-size:.8em; padding-left:5px;">
 						<strong> Recent Achievements: </strong>
 							<? /* Recent Achievements */
-								$recentArray = Userach_model::byUserID($friend->getID());
+								$recentArray = Userach_model::byUserID($friend->getID(),3);
 								
 								if ($recentArray != NULL) {
 									

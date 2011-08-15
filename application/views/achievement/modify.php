@@ -11,28 +11,28 @@
     
     <div class="ctrlHolder">
     	<?=form_label('Achievement Name', 'name')?>
-		<?=form_input('name', set_value('name',$achievement->getName()));?>
+		<?=form_input('name', set_value('name',$achievement->getName()),'class="required"');?>
       	<p class="formHint">Try to keep it short...</p>
     </div>
     
     <div class="ctrlHolder">
-    	<?=form_label('Upload Avatar', 'name')?>
-		<?=form_upload('userfile',  set_value('userfile',$achievement->getAvatar()));?>
+    	<?=form_label('Upload Avatar', 'userfile')?>
+		<?=form_upload('userfile',  set_value('userfile',$achievement->getAvatar()),'class="required primaryAction"');?>
     </div>
 
     <div class="ctrlHolder">
 		<?=form_label('Category', 'category')?>
-		<?=form_dropdown('category', $categoryArray, set_value('category',$achievement->getCategoryID()))?>
+		<?=form_dropdown('category', $categoryArray, set_value('category',$achievement->getCategoryID()),'class="required"')?>
     </div>
     
     <div class="ctrlHolder">
     	<?=form_label('Point', 'point')?>
-		<?=form_dropdown('point', array(1=>1,2=>2,3=>3,4=>4,5=>5), set_value('point',$achievement->getPoint()))?>
+		<?=form_dropdown('point', array(1=>1,2=>2,3=>3,4=>4,5=>5), set_value('point',$achievement->getPoint()),'class="required"')?>
     </div>
 
     <div class="ctrlHolder">
     	<?=form_label('Description', 'description')?>
-		<?=form_textarea('description', set_value('description',$achievement->getDescription()))?>
+		<?=form_textarea('description', set_value('description',$achievement->getDescription()),'class="required"')?>
     </div>
     
   </fieldset>

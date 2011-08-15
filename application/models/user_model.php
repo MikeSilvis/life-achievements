@@ -6,6 +6,7 @@ class User_model extends CI_Model {
     {
         parent::__construct();
     }
+
     public $user_id;
     public $fb_id;
     public $uid;
