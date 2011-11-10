@@ -24,21 +24,22 @@ class User extends CI_Controller {
 		// userInfo widget
 		$commentsArray = array(
 								'widgetTitle' => $this->data['user']->getName(), 
-								'view' => 'user/userInfo','content'=>$this->data,'classHolder'=>'userInfoHeader'
+								'view' => 'user/userInfo','content'=>$this->data,'classHolder'=>''
 							  );
-		$this->template->write_view('holder', 'default/widget',$commentsArray);	
+		$this->template->write_view('sideBar', 'default/widget',$commentsArray);	
+		
 		// achievement widget
 		$achievementArray = array(
 									'widgetTitle' => 'Recent Achievements', 'view' => 'user/achievements',
-									'content'=>$this->data,'classHolder'=>'achievements'
+									'content'=>$this->data,'classHolder'=>''
 								);
-		$this->template->write_view('holder', 'default/widget',$achievementArray);			
+		$this->template->write_view('content', 'default/widget',$achievementArray);			
 		// comments widget
-		$commentsArray = array('widgetTitle' => 'Comments', 'view' => 'user/comments','content'=>'','classHolder'=>'comments');
-		$this->template->write_view('holder', 'default/widget',$commentsArray);	
+		$commentsArray = array('widgetTitle' => 'Comments', 'view' => 'user/comments','content'=>'','classHolder'=>'');
+		$this->template->write_view('content', 'default/widget',$commentsArray);	
 		// friends widget
 		$friendsArray = array('widgetTitle' => 'Friends', 'view' => 'user/friends','content'=>$this->data,'classHolder'=>'friends');
-		$this->template->write_view('holder', 'default/widget',$friendsArray);	
+		$this->template->write_view('sideBar', 'default/widget',$friendsArray);	
 		
 		$this->template->render();
 	}

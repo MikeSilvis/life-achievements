@@ -2,15 +2,15 @@
 	<?php foreach($achievementArray as $achievement): ?>	
 			<div class="friendHolder">
 					<?=$achievement->getAvatarIMG('thumb','float:left; width:50px; height:50px;',$achievement->getName())?>
-					<div class="friendContent">
-						<div class="friendText">
+					<div class="achievementContent">
+						<div class="achievementText">
 							<div style="font-size:1.2em;">
 								<a href="<?=site_url("manage/view/".$achievement->getUserAchID());?>" class="ajax">
-									<?=character_limiter($achievement->getUserName(), 15)?>
+									<?=character_limiter($achievement->getUserName(), 50)?>
 								</a>								
 							</div>
 							<div style="font-size:.8em; padding-left:5px;">
-								<?=character_limiter($achievement->getUserDescription(), 50);?>
+								<?=character_limiter($achievement->getUserDescription(), 150);?>
 								<? 
 									if($achievement->canEdit())
 										echo anchor('/manage/update/'.$achievement->getUserAchID(),'edit','class="ajax"');

@@ -1,19 +1,18 @@
-<div id="avatarPics">
+<div style="float:left; width:100px; padding-left:14px;">
 	<img src="https://graph.facebook.com/<?=$user->getUID()?>/picture" alt="<?=$user->getName()?>" class="avatar"/>
-	<br><br>
+</div>
+<div style="float:right; width:100px;">
 	<div class="scoreLarge">
 		<?=$user->getTotalPoints()?>
 	</div>
 </div>
-<div class="userBio" style="padding-left:80px;">
+<br class="clear">
+<div class="userBio">
 	<p>	<strong>Location:		</strong> 	<?=$user->getLocation()?>									</p>
 	<p>	<strong>Age: 			</strong>	<?=$user->getAge()?>										</p>
-</div>
-<div class="userBio">
 	<p>	<strong>Last Login:  	</strong>	<?=date('F jS, Y', strtotime($user->getLastLogin()));?>		</p>
 	<p>	<strong>Registered: 	</strong>	<?=date('F jS, Y', strtotime($user->getRegistered()));?>	</p>
-</div>
-<div class="userBio">
+	
 	<!-- Facebook Button -->
 	<div style="float:left; width:60px;">
 		<div id="fb-root"></div>
@@ -39,11 +38,13 @@
 		  })();
 		</script>			
 	</div>
-</div><!-- end userBio for social media -->
+</div><!-- end userBio Information -->
+
+<? /* Advertisements 
 <div style="float:right; padding-top:20px;">
 	<script type="text/javascript"><!--
 	google_ad_client = "ca-pub-6445244283017686";
-	/* life achievements ads */
+	// life achievements ads 
 	google_ad_slot = "2508947736";
 	google_ad_width = 728;
 	google_ad_height = 90;
@@ -53,3 +54,4 @@
 	src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
 	</script>
 </div>
+*/ ?>

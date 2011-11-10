@@ -2,8 +2,6 @@
 <html>
 <head>
 <title><?=$title;?></title>
-<!-- My Style Sheets -->
-<link rel="stylesheet" href='<?=base_url()?>assets/css/layout.css' type="text/css" media="screen, projection" /> 
 <link rel="stylesheet" href='<?=base_url()?>assets/css/style.css' type="text/css" media="screen, projection" />
 <!-- jquery -->
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js"></script>
@@ -54,7 +52,7 @@
 		<div id="logo"></div>
 		<div id="search">
 			<form>
-				<input type="text" value="Search" id="searchBox">
+				<input type="text" id="searchBox" placeholder="Search">
 			</form>
 		</div>
 		<div id="userInfo">

@@ -4,7 +4,12 @@ body {
 	padding: 0;
 	font-family: Lucida Grande, Verdana, Sans-serif;
 	font-size: 12px;
-	color: #494949
+	color: #494949;
+    background: url(../img/site/bg.jpg) no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
 }
 p a{
 	text-decoration: none;
@@ -46,12 +51,11 @@ h2 a{
 	width: 200px;
 	height: 25px;
 	font-size: 12px;
-	text-align: right;
-	padding-right: 10px;
+	padding-left: 10px;
 	border: 0;
 	background-image: url(../img/site/search.png);
 	background-repeat: no-repeat;
-	background-position: 5% 50%
+	background-position: 95% 50%
 }
 
 #userInfo a {
@@ -111,7 +115,7 @@ h2 a{
 .avatar {
 	border: #83d3d8;
 	border-style:solid;
-	width:76px;
+	width:80px;
 }
 .scoreLarge{
 	background-image: url(../img/site/scoreLarge.png);
@@ -144,4 +148,153 @@ h2 a{
 	text-align:center;
 	color:green;
 	padding:10px;
+}
+#wrapper {
+	width: 1000px;
+	margin: 0 auto
+}
+
+#header {
+	margin: 0 auto;
+	width: 800px;
+	background-color: #494949;
+	-moz-border-radius-bottomright: 20px;
+	border-bottom-right-radius: 20px;
+	-moz-border-radius-bottomleft: 20px;
+	border-bottom-left-radius: 20px;
+	height: 40px;
+	color: #fff;
+	padding-top: 10px
+}
+
+#logo {
+	float: left;
+	width: 200px;
+	height: 30px;
+	padding-left: 20px;
+	background-image: url(../img/site/search.png) no-repeat
+}
+
+#search {
+	float: right;
+	width: 200px;
+	padding-right: 20px;
+	padding-top: 2px;
+	text-align: right
+}
+
+#userInfo {
+	float: right;
+	color: #fff;
+	width: 200px;
+	height: 37px;
+	padding-top: 6px;
+	text-align: right;
+	padding-right: 20px
+}
+
+#holder {
+	float: left;
+	padding: 10px;
+	width: 980px
+}
+
+#content {
+	float: right;
+	width: 700px
+}
+
+#sideBar {
+	float: left;
+	width: 300px
+}
+
+#footer-top {
+	float: left;
+	background-repeat: repeat-x;
+	background-image: url(../img/site/footer.png);
+	height: 5px;
+	width: 100%;
+	margin: 0
+}
+
+#footer {
+	float: left;
+	width: 1000px;
+	background-color: #000;
+	color: #fff;
+	margin: 0;
+	padding: 5px
+}
+#avatarPics {
+	float: left;
+	width: 100px;
+	padding-top: 10px
+}
+
+.userBio {
+	margin: 0 auto;
+	width: 220px;
+	padding-top: 10px
+}
+
+/* Friends Holder */
+.friendHolder {
+	float: left;
+	width: 100%;
+	clear: both;
+	height: 50px;
+	margin-bottom: 10px
+}
+
+.friendContent {
+	float: right;
+	padding-left: 10px;
+	width: 220px;
+}
+
+.friendText {
+	float: left;
+	width: 150px;
+}
+
+.friendText a {
+	color: #5e8bd4!important
+}
+.achievementContent {
+	float: right;
+	padding-left: 10px;
+	width: 550px
+}
+
+.achievementText {
+	float: left;
+	width: 400px
+}
+
+#fancyBox {
+	float: left;
+	width: 500px
+}
+
+#fancyIMG {
+	float: left;
+	width: 200px;
+	height:120px;
+}
+
+#fancyInfo {
+	float: right;
+	width: 300px;
+	height:120px;
+}
+
+#fancyDescrip {
+	float: left;
+	width: 350px
+}
+#fancyAvatar {
+	float:right; 
+	padding-top:20px;
+	width:100px;
 }

@@ -22,7 +22,7 @@ class Achievement extends CI_Controller {
     	if ($this->form_validation->run('achievement') == TRUE) // form has been submitted and passes all error checking
 		{				
             $achievement->insert($this->input->post());
-            $this->session->set_flashdata('success', 'Insert succesful');
+            $this->session->set_flashdata('success', 'Insert successful');
             
            	$achievement->setID($this->db->insert_id());
 			$achievement->uploadAvatar();
